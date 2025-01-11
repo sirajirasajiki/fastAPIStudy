@@ -46,3 +46,11 @@ def read_user(username: str):
         raise HTTPException(status_code=404, detail="User not found")
     return {"user": user}
 
+# Update: ユーザー情報更新
+@app.put("/users/{username}")
+def update_user(username: str, updated_user: User):
+    for user in users:
+        if user["username"] == username:
+            user.update(updated_user.dict())
+            return {"message": "User updated successfully", "user": user}
+    raise HTTPException(status_code=404, detail="User not found")
