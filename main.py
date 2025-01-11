@@ -54,3 +54,10 @@ def update_user(username: str, updated_user: User):
             user.update(updated_user.dict())
             return {"message": "User updated successfully", "user": user}
     raise HTTPException(status_code=404, detail="User not found")
+
+# Delete: ユーザー削除
+@app.delete("/users/{username}")
+def delete_user(username: str):
+    global users
+    users = [u for u in users if u["username"] != username]
+    return {"message": f"User {username} deleted successfully"}
