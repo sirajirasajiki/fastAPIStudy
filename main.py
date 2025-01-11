@@ -59,5 +59,11 @@ def update_user(username: str, updated_user: User):
 @app.delete("/users/{username}")
 def delete_user(username: str):
     global users
+    # ユーザーを検索
+    user = next((u for u in users if u["username"] == username), None)
+    if not user:
+        # 見つからない場合はエラーを返す
+        raise HTTPException(status_code=404, detail="User not found")
+    # 見つかった場合は削除
     users = [u for u in users if u["username"] != username]
     return {"message": f"User {username} deleted successfully"}
