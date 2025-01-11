@@ -37,3 +37,12 @@ def create_user(user: User):
 def read_users():
     return {"Users": users}
 
+# Read: 特定のユーザー取得
+@app.get("/users/{username}")
+def read_user(username: str):
+    # ユーザーが存在するかのチェック
+    user = next((u for u in users if u["username"] == username), None)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"user": user}
+
