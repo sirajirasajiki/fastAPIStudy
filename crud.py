@@ -16,3 +16,25 @@ def get_user(db: Session, user_id: int) -> User:
 # 全ユーザーを取得
 def get_users(db: Session):
     return db.query(User).all()
+
+# ユーザー情報更新
+def update_user(db: Session, user_id: int, username: str = None, email: str = None) -> User:
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return None  # ユーザーが見つからない場合はNoneを返す
+    if username:
+        user.username = username
+    if email:
+        user.email = email
+    db.commit()
+    db.refresh(user)
+    return user
+
+# ユーザー情報削除
+def delete_user(db: Session, user_id: int) -> bool:
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        return False  # ユーザーが見つからない場合はFalseを返す
+    db.delete(user)
+    db.commit()
+    return True
