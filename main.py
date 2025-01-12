@@ -50,7 +50,7 @@ def delete_user_endpoint(user_id: int, db: Session = Depends(get_db)):
 def update_user_endpoint(user_id: int, username: str, email: str, db: Session = Depends(get_db)):
     try:
         user = update_user(db, user_id=user_id, username=username, email=email)
-        if user is None:
+        if not user:
             # 見つからない場合はエラーを返す
             raise HTTPException(status_code=404, detail="User not found")
         # 見つかった場合は、更新
