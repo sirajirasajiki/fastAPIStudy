@@ -42,6 +42,9 @@ def delete_user_endpoint(user_id: int, db: Session = Depends(get_db)):
             raise HTTPException(status_code=404, detail="User not found")
         # 見つかった場合は削除
         return "delete success"
+    except HTTPException as http_ex:
+        # HTTPExceptionをそのまま再スロー
+        raise http_ex
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -55,5 +58,8 @@ def update_user_endpoint(user_id: int, username: str, email: str, db: Session = 
             raise HTTPException(status_code=404, detail="User not found")
         # 見つかった場合は、更新
         return {"id": user.id, "username": user.username, "email": user.email}
+    except HTTPException as http_ex:
+        # HTTPExceptionをそのまま再スロー
+        raise http_ex
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
