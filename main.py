@@ -1,9 +1,12 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from .database import get_db
-from .crud import create_user, get_user, get_users
+from database import get_db, create_tables
+from crud import create_user, get_user, get_users
 
 app = FastAPI()
+
+# サーバー起動時にテーブル作成
+create_tables()
 
 # ユーザー作成エンドポイント
 @app.post("/users/")

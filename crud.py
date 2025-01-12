@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from .models import User
+from models import User
 
 # ユーザー作成
 def create_user(db: Session, username: str, email: str) -> User:
