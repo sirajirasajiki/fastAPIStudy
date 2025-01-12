@@ -9,13 +9,13 @@ def create_user(db: Session, username: str, email: str) -> User:
     db.refresh(new_user)
     return new_user
 
-# 特定のユーザーを取得
-def get_user(db: Session, user_id: int) -> User:
-    return db.query(User).filter(User.id == user_id).first()
-
 # 全ユーザーを取得
 def get_users(db: Session):
     return db.query(User).all()
+
+# 特定のユーザーを取得
+def get_user(db: Session, user_id: int) -> User:
+    return db.query(User).filter(User.id == user_id).first()
 
 # ユーザー情報更新
 def update_user(db: Session, user_id: int, username: str = None, email: str = None) -> User:
