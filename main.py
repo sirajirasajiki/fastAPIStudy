@@ -17,6 +17,12 @@ def create_user_endpoint(username: str, email: str, db: Session = Depends(get_db
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+# 全ユーザーを取得
+@app.get("/users/")
+def read_users_endpoint(db: Session = Depends(get_db)):
+    users = get_users(db)
+    return [{"id": user.id, "username": user.username, "email": user.email} for user in users]
+
 # 特定のユーザーを取得
 @app.get("/users/{user_id}")
 def read_user_endpoint(user_id: int, db: Session = Depends(get_db)):
@@ -25,8 +31,3 @@ def read_user_endpoint(user_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="User not found")
     return {"id": user.id, "username": user.username, "email": user.email}
 
-# 全ユーザーを取得
-@app.get("/users/")
-def read_users_endpoint(db: Session = Depends(get_db)):
-    users = get_users(db)
-    return [{"id": user.id, "username": user.username, "email": user.email} for user in users]
