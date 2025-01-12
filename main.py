@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db, create_tables
-from crud import create_user, get_user, get_users, delete_user
+from crud import create_user, get_user, get_users, delete_user, update_user
 
 app = FastAPI()
 
@@ -35,9 +35,25 @@ def read_user_endpoint(user_id: int, db: Session = Depends(get_db)):
 @app.delete("/users/{user_id}")
 def delete_user_endpoint(user_id: int, db: Session = Depends(get_db)):
     # ユーザーを削除
-    result = delete_user(db, user_id)
-    if not result:
-        # 見つからない場合はエラーを返す
-        raise HTTPException(status_code=404, detail="User not found")
-    # 見つかった場合は削除
-    return "delete success"
+    try:
+        result = delete_user(db, user_id)
+        if not result:
+            # 見つからない場合はエラーを返す
+            raise HTTPException(status_code=404, detail="User not found")
+        # 見つかった場合は削除
+        return "delete success"
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# ユーザー情報更新
+@app.put("/users/{user_id}")
+def update_user_endpoint(user_id: int, username: str, email: str, db: Session = Depends(get_db)):
+    try:
+        user = update_user(db, user_id=user_id, username=username, email=email)
+        if user is None:
+            # 見つからない場合はエラーを返す
+            raise HTTPException(status_code=404, detail="User not found")
+        # 見つかった場合は、更新
+        return {"id": user.id, "username": user.username, "email": user.email}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
