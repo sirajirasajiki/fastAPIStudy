@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db, create_tables
+from msdatabase import get_db, create_tables
 from crud import create_user, get_user, get_users, delete_user, update_user
 
 app = FastAPI()
